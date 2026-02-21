@@ -5,6 +5,7 @@ import com.dog.repository.RepositoryTutor;
 import org.springframework.stereotype.Service;
 
 import com.dog.entity.Dog;
+import com.dog.entity.Tutor;
 import com.dog.repository.RepositoryDog;
 
 @Service
@@ -60,14 +61,32 @@ public class ServiceDog {
 
 	// Metodo comentado - Fim
 
-	public Dog adotarDog(String name) {
+	// Metodo para quando adotar o dog, inserir true no atributo adotado (para deixar ele indisponivel)
+	//e associar o relacionamento entre tutor e dog.
+	public Dog adotarDog(String name, Long tutorId) {
 		Dog dog = repositoryDog.findByName(name).orElseThrow(() -> new RuntimeException("Dog not found"));
 
-		dog.setAdopted(true);
+		if (dog.getAdopted() == null) {
+			// Fazer a associação do relacionamento correto entre tutor e dog, ou seja
+			// mostrar corretamente
+			// Qual tutor tem o dog e a qual tutor o dog pertence
+			// e nao um dog ter o mesmo tutor, igual estava antes, o mesmo para todos
+			// Então qualquer tipo de sistema que for ter relacionamento fazer igual desse
+			// jeito abaixo
+			// procurar igual abaixo e seta o valor
+			Tutor tutor = repositoryTutor.findById(tutorId).orElseThrow(() -> new RuntimeException("Not found"));
+			// Setando o valor
+			dog.setTutor(tutor);
+			dog.setAdopted(true);
+			repositoryDog.save(dog);
 
-		repositoryDog.save(dog);
+		} else {
+			System.out.println("Dog unavailable, please, adopte other dog!");
+			
+		}
 
 		return dog;
+
 	}
 
 }

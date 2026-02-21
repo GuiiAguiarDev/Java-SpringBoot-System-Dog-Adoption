@@ -3,9 +3,12 @@ package com.dog;
 import com.dog.entity.Dog;
 import com.dog.entity.Tutor;
 import com.dog.repository.RepositoryTutor;
+import com.dog.service.DogAdoption;
 import com.dog.service.ServiceDog;
 import com.dog.service.ServiceTutor;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -41,15 +44,46 @@ public class DogApplication implements CommandLineRunner {
 
 		// Objects
 		Tutor t = new Tutor();
-		//Como to usando while, declaro fora e instancio no while igual abaixo
+		// Como to usando while, declaro fora e instancio no while igual abaixo
 		Dog dog = new Dog();
-
+		com.dog.entity.DogAdoption adoption = new com.dog.entity.DogAdoption();
 		Scanner sc = new Scanner(System.in);
 
 		// Constant and variables
 		String welcome = "bem vindo ao sistema:";
 		char respDog = 's';
 		int respAcaoTutor = 0;
+
+		// System Client
+		System.out.println("--------------------------------------");
+		System.out.println("--------------------------------------");
+		System.out.println("Adote!");
+		System.out.println("Seja bem vindo, cadastra-se para adotar!");
+		System.out.println("--------------------------------------");
+		System.out.println("--------------------------------------");
+		System.out.println();
+
+		System.out.println("what is your name?");
+		String name = sc.next();
+		System.out.println("What is your address, enoth number?");
+		String add = sc.next();
+		System.out.println("What is your profession?");
+		String profession = sc.next();
+		System.out.println("What is your salary?");
+
+		Double salary = sc.nextDouble();
+		t.setName(name);
+		t.setAddress(add);
+		t.setProfession(profession);
+		t.setSalary(salary);
+		t.addDogs(dog);
+		serviceTutor.save(t);
+
+		System.out.println(welcome.toString().toUpperCase() + name);
+
+		System.out.println("-----------------------------------------");
+		System.out.println("-----------------------------------------");
+		System.out.println("-----------------------------------------");
 
 		// System Employee
 		System.out.println("Welcome Employee, let register Dogs in System");
@@ -75,37 +109,6 @@ public class DogApplication implements CommandLineRunner {
 			respDog = sc.next().charAt(0);
 		}
 
-		// System Client
-		System.out.println("--------------------------------------");
-		System.out.println("--------------------------------------");
-		System.out.println("Adote!");
-		System.out.println("Seja bem vindo, cadastra-se para adotar!");
-		System.out.println("--------------------------------------");
-		System.out.println("--------------------------------------");
-		System.out.println();
-
-		System.out.println("what is your name?");
-		String name = sc.next();
-		System.out.println("What is your address, enoth number?");
-		String add = sc.next();
-		System.out.println("What is your profession?");
-		String profession = sc.next();
-		System.out.println("Qua is your salary?");
-
-		Double salary = sc.nextDouble();
-		t.setName(name);
-		t.setAddress(add);
-		t.setProfession(profession);
-		t.setSalary(salary);
-		t.addDogs(dog);
-		serviceTutor.save(t);
-
-		System.out.println(welcome.toString().toUpperCase() + name);
-
-		System.out.println("-----------------------------------------");
-		System.out.println("-----------------------------------------");
-		System.out.println("-----------------------------------------");
-
 		System.out.println("Lista de Dogs disponiveis");
 		System.out.println(serviceDog.list(dog));
 		System.out.println("Deseja Adotar - 1/sim - 2/não");
@@ -125,16 +128,22 @@ public class DogApplication implements CommandLineRunner {
 				/*
 				 * serviceDog.adotar(searchName);
 				 */
-				serviceDog.adotarDog(searchName);
-				System.out.println("Adotado");
+				serviceDog.adotarDog(searchName, t.getId());
 				respListDog = 0;
-				System.out.println("Volte sempre");
 			} else {
 				System.out.println("Gostaria de ver novamente a lista de dogs disponiveis?" + "\n" + "1/sim - 2/não");
 				respListDog = sc.nextInt();
 			}
 
 		}
+
+		// Final system genered Register
+
+		adoption.setNumber(111515);
+		adoption.setDate(new Date(2026, 2, 5));
+		adoption.setDog(dog);
+		adoption.setTutor(t);
+
 	}
 
 }
